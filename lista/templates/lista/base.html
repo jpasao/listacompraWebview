@@ -21,9 +21,24 @@
         </nav>
         <!-- Header -->
         <header class="w3-container w3-theme w3-padding" id="myHeader">
-            <i onclick="w3_open()" class="fa fa-bars w3-xlarge w3-button w3-theme"></i> 
-            <div class="w3-center">
-                <h1 class="w3-xxxlarge w3-animate-bottom">ListaDLC</h1>
+            <div class="w3-row">
+                <div class="w3-third">
+                    <i onclick="w3_open()" class="fa fa-bars w3-xlarge w3-button w3-theme"></i>
+                </div>
+                <div class="w3-third">
+                    <span class="w3-xxxlarge w3-animate-bottom center">ListaDLC</span>
+                </div>
+                <div class="w3-third">
+                    <span class="w3-bar-item w3-right">
+                        <a class="w3-button w3-theme-d3 w3-disabled w3-circle">
+                            {% if user.is_authenticated %}
+                            {{ user.username|slice:":1"|upper }}
+                            {% else %}
+                            ?
+                            {% endif %}
+                        </a>
+                    </span>
+                </div>
             </div>
         </header>
         <div class="w3-row-padding w3-center w3-margin-top">
@@ -31,12 +46,12 @@
             {% endblock %}
         </div>
         <!-- Footer -->
-        <footer class="w3-container w3-theme-dark w3-padding-16">
-            <p>Desde 2025 facilitando esto del planificar la lista de la compra</p>
-            <div style="position:relative;bottom:55px;" class="w3-tooltip w3-right">
-            <span class="w3-text w3-theme-light w3-padding">¡Arriba con ella!</span>    
-            <a class="w3-text-white" href="#myHeader"><span class="w3-xlarge">
-            <i class="fa fa-chevron-circle-up"></i></span></a>
+        <footer class="w3-container w3-theme-dark">
+            <p class="center">Desde 2025 facilitando la lista de la compra</p>
+            <div style="position:relative;bottom:45px;" class="w3-tooltip w3-right">
+                <span class="w3-text w3-theme-light w3-padding">¡Arriba con ella!</span>    
+                <a class="w3-text-white" href="#myHeader"><span class="w3-xlarge">
+                <i class="fa fa-chevron-circle-up"></i></span></a>
             </div>
         </footer>
         <script>

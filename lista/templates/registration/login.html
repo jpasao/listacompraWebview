@@ -1,0 +1,23 @@
+{% extends "lista/base.html" %}
+
+{% block content %}
+    {% if form.errors %}
+        <p>Algo no habrás puesto bien... inténtalo otra vez.</p>
+    {% endif %}
+    <div class="w3-container login">
+        <form method="post" action="{% url 'login' %}" class="w3-container w3-card-4 w3-padding-16">
+        {% csrf_token %}
+            <h2>Acceso</h2>
+            <div class="w3-section">
+                {{ form.username.label_tag }}
+                {{ form.username }}
+            </div>
+            <div class="w3-section">
+                {{ form.password.label_tag }}
+                {{ form.password }}
+            </div>
+            <input type="submit" value="login" class="w3-button w3-theme" />
+            <input type="hidden" name="next" value="{{ next }}" />
+        </form>
+    </div>
+{% endblock %}
