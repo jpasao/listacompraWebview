@@ -77,7 +77,7 @@ class AuthUserUserPermissions(models.Model):
         unique_together = (('user', 'permission'),)
 
 
-class Authors(models.Model):
+class Author(models.Model):
     authorid = models.AutoField(db_column='authorId', primary_key=True)  # Field name made lowercase.
     name = models.CharField(max_length=100, blank=True, null=True)
     image = models.CharField(max_length=100)
@@ -87,7 +87,7 @@ class Authors(models.Model):
         db_table = 'authors'
 
 
-class Difficulties(models.Model):
+class Difficulty(models.Model):
     difficultid = models.PositiveIntegerField(db_column='difficultId', primary_key=True)  # Field name made lowercase.
     name = models.TextField()
 
@@ -157,9 +157,9 @@ class Historic(models.Model):
         db_table = 'historic'
 
 
-class Images(models.Model):
+class Image(models.Model):
     imageid = models.AutoField(db_column='imageId', primary_key=True)  # Field name made lowercase.
-    recipeid = models.ForeignKey('Recipes', models.CASCADE, db_column='recipeId')  # Field name made lowercase.
+    recipeid = models.ForeignKey('Recipe', models.CASCADE, db_column='recipeId')  # Field name made lowercase.
     name = models.CharField(max_length=100)
 
     class Meta:
@@ -167,7 +167,7 @@ class Images(models.Model):
         db_table = 'images'
 
 
-class Ingredients(models.Model):
+class Ingredient(models.Model):
     ingredientid = models.AutoField(db_column='ingredientId', primary_key=True)  # Field name made lowercase.
     name = models.TextField(db_collation='utf8mb4_general_ci', blank=True, null=True)
     isproduct = models.TextField(db_column='isProduct', blank=True, null=True)  # Field name made lowercase. This field type is a guess.
@@ -189,9 +189,9 @@ class Log(models.Model):
         db_table = 'log'
 
 
-class Mealingredients(models.Model):
-    mealid = models.OneToOneField('Meals', models.CASCADE, db_column='mealId', primary_key=True)  # Field name made lowercase. The composite primary key (mealId, ingredientId) found, that is not supported. The first column is selected.
-    ingredientid = models.ForeignKey(Ingredients, models.CASCADE, db_column='ingredientId')  # Field name made lowercase.
+class Mealingredient(models.Model):
+    mealid = models.OneToOneField('Meal', models.CASCADE, db_column='mealId', primary_key=True)  # Field name made lowercase. The composite primary key (mealId, ingredientId) found, that is not supported. The first column is selected.
+    ingredientid = models.ForeignKey(Ingredient, models.CASCADE, db_column='ingredientId')  # Field name made lowercase.
 
     class Meta:
         managed = False
@@ -199,7 +199,7 @@ class Mealingredients(models.Model):
         unique_together = (('mealid', 'ingredientid'),)
 
 
-class Meals(models.Model):
+class Meal(models.Model):
     mealid = models.AutoField(db_column='mealId', primary_key=True)  # Field name made lowercase.
     name = models.TextField(db_collation='utf8mb4_general_ci', blank=True, null=True)
     islunch = models.IntegerField(db_column='isLunch')  # Field name made lowercase.
@@ -210,9 +210,9 @@ class Meals(models.Model):
         db_table = 'meals'
 
 
-class Notes(models.Model):
+class Note(models.Model):
     noteid = models.AutoField(db_column='noteId', primary_key=True)  # Field name made lowercase.
-    recipeid = models.ForeignKey('Recipes', models.CASCADE, db_column='recipeId')  # Field name made lowercase.
+    recipeid = models.ForeignKey('Recipe', models.CASCADE, db_column='recipeId')  # Field name made lowercase.
     note = models.CharField(max_length=500)
 
     class Meta:
@@ -220,7 +220,7 @@ class Notes(models.Model):
         db_table = 'notes'
 
 
-class Operations(models.Model):
+class Operation(models.Model):
     operationid = models.IntegerField(db_column='operationId', primary_key=True)  # Field name made lowercase.
     authorid = models.IntegerField(db_column='authorId', blank=True, null=True)  # Field name made lowercase.
     productid = models.IntegerField(db_column='productId', blank=True, null=True)  # Field name made lowercase.
@@ -231,9 +231,9 @@ class Operations(models.Model):
         db_table = 'operations'
 
 
-class Otherschild(models.Model):
+class Otherchild(models.Model):
     id = models.AutoField(primary_key=True)
-    parentid = models.ForeignKey('Othersparent', models.CASCADE, db_column='parentId')  # Field name made lowercase.
+    parentid = models.ForeignKey('Otherparent', models.CASCADE, db_column='parentId')  # Field name made lowercase.
     name = models.CharField(max_length=100)
     ischecked = models.IntegerField(db_column='isChecked')  # Field name made lowercase.
 
@@ -242,7 +242,7 @@ class Otherschild(models.Model):
         db_table = 'otherschild'
 
 
-class Othersparent(models.Model):
+class Otherparent(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=50)
 
@@ -251,9 +251,9 @@ class Othersparent(models.Model):
         db_table = 'othersparent'
 
 
-class Recipeingredients(models.Model):
-    ingredientid = models.OneToOneField(Ingredients, models.CASCADE, db_column='ingredientId', primary_key=True)  # Field name made lowercase. The composite primary key (ingredientId, recipeId) found, that is not supported. The first column is selected.
-    recipeid = models.ForeignKey('Recipes', models.CASCADE, db_column='recipeId')  # Field name made lowercase.
+class Recipeingredient(models.Model):
+    ingredientid = models.OneToOneField(Ingredient, models.CASCADE, db_column='ingredientId', primary_key=True)  # Field name made lowercase. The composite primary key (ingredientId, recipeId) found, that is not supported. The first column is selected.
+    recipeid = models.ForeignKey('Recipe', models.CASCADE, db_column='recipeId')  # Field name made lowercase.
     number = models.CharField(max_length=50, db_collation='latin1_swedish_ci', blank=True, null=True)
     ingredientnote = models.CharField(db_column='ingredientNote', max_length=200, db_collation='latin1_swedish_ci', blank=True, null=True)  # Field name made lowercase.
 
@@ -263,7 +263,7 @@ class Recipeingredients(models.Model):
         unique_together = (('ingredientid', 'recipeid'),)
 
 
-class Recipes(models.Model):
+class Recipe(models.Model):
     recipeid = models.AutoField(db_column='recipeId', primary_key=True)  # Field name made lowercase.
     name = models.CharField(max_length=200)
     authorid = models.IntegerField(db_column='authorId')  # Field name made lowercase.
@@ -277,9 +277,9 @@ class Recipes(models.Model):
         db_table = 'recipes'
 
 
-class Recipetags(models.Model):
-    tagid = models.OneToOneField('Tags', models.CASCADE, db_column='tagId', primary_key=True)  # Field name made lowercase. The composite primary key (tagId, recipeId) found, that is not supported. The first column is selected.
-    recipeid = models.ForeignKey(Recipes, models.CASCADE, db_column='recipeId')  # Field name made lowercase.
+class Recipetag(models.Model):
+    tagid = models.OneToOneField('Tag', models.CASCADE, db_column='tagId', primary_key=True)  # Field name made lowercase. The composite primary key (tagId, recipeId) found, that is not supported. The first column is selected.
+    recipeid = models.ForeignKey(Recipe, models.CASCADE, db_column='recipeId')  # Field name made lowercase.
 
     class Meta:
         managed = False
@@ -287,9 +287,9 @@ class Recipetags(models.Model):
         unique_together = (('tagid', 'recipeid'),)
 
 
-class Steps(models.Model):
+class Step(models.Model):
     stepid = models.AutoField(db_column='stepId', primary_key=True)  # Field name made lowercase.
-    recipeid = models.ForeignKey(Recipes, models.CASCADE, db_column='recipeId')  # Field name made lowercase.
+    recipeid = models.ForeignKey(Recipe, models.CASCADE, db_column='recipeId')  # Field name made lowercase.
     step = models.CharField(max_length=1000)
 
     class Meta:
@@ -297,7 +297,7 @@ class Steps(models.Model):
         db_table = 'steps'
 
 
-class Tags(models.Model):
+class Tag(models.Model):
     tagid = models.AutoField(db_column='tagId', primary_key=True)  # Field name made lowercase.
     name = models.CharField(max_length=100)
 

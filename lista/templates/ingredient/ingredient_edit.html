@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="w3-row w3-container w3-padding w3-margin">
+    <h2>Nuevo ítem</h2>
+    <form method="POST" class="w3-container w3-card-4 w3-left-align w3-padding">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="w3-button w3-theme">Guardar</button>
+    </form>
+</div>
+
+{% endblock %}
