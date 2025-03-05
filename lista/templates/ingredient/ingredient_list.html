@@ -19,18 +19,27 @@
         <thead>
             <tr class="w3-theme">
                 <th>Marcado</th>
-                <th>Quantity</th>
+                <th>Cantidad</th>
                 <th>Nombre</th>
-                <th>Comment</th>
+                <th>Comentarios</th>
+                <th>Acciones</th>
             </tr>
         </thead>
         <tbody>
         {% for ingredient in ingredients %}
             <tr>
-                <td>{{ ingredient.ischecked }}</td>
+                <td>
+                    <form method="POST" action="{% url 'ingredient_check' pk=ingredient.pk %}">
+                        {% csrf_token %}
+                        <input type="checkbox" name="ischecked" onclick="this.form.submit()" class="w3-check" id="id_ischecked" {% if ingredient.ischecked == '1' %} checked {% else %} '' {% endif %} >
+                    </form>
+                </td>
                 <td>{{ ingredient.quantity }}</td>
                 <td>{{ ingredient.name }}</td>
                 <td>{{ ingredient.comment }}</td>
+                <td>
+                    <a href="{% url 'ingredient_edit' pk=ingredient.pk %}" class="w3-bar-item w3-button w3-hover-theme">Editar</a>
+                </td>
             </tr>
         {% endfor %}
         </tbody>

@@ -28,16 +28,6 @@
                     <label class="w3-bar-item">Circule; aquí no hay nada que ver</label>
                 {% endif %}
             </div>
-            <!-- <h1 class="w3-xxxlarge w3-text-theme">¿Qué quieres?</h1>
-            <button class="w3-bar-item w3-button" onclick="w3_close()">CERRAR ESTO <i class="fa fa-remove"></i></button>
-            <hr/>
-            {% if user.is_authenticated %}
-                <a href="{% url 'ingredient_list' %}" class="w3-bar-item w3-button">Ir a la lista principal</a>
-                <a href="#" class="w3-bar-item w3-button">Ver las comidas de la semana</a>
-                <a href="#" class="w3-bar-item w3-button">Ir a la lista de otras cosas</a>
-            {% else %}
-                <label class="w3-bar-item">Circule; aquí no hay nada que ver</label>
-            {% endif %} -->
         </nav>
 
         <!-- Overlay effect when opening sidebar on small screens -->
@@ -50,7 +40,10 @@
                     <i onclick="w3_open()" class="fa fa-bars w3-xlarge w3-button w3-theme"></i>
                 </div>
                 <div class="w3-third">
-                    <span class="w3-xxxlarge w3-animate-bottom center">ListaDLC</span>
+                    <a href="{% url 'ingredient_list' %}" class="no-decoration">
+                        <span class="w3-xxxlarge w3-animate-bottom center">ListaDLC</span>
+                    </a>
+                    
                 </div>
                 <div class="w3-third">
                     <span class="w3-bar-item w3-right">

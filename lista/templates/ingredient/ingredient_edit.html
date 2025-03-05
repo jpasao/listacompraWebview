@@ -5,7 +5,26 @@
     <h2>Nuevo ítem</h2>
     <form method="POST" class="w3-container w3-card-4 w3-left-align w3-padding">
         {% csrf_token %}
-        {{ form.as_p }}
+        <div class="fieldWrapper">
+            {{ form.name.errors }}
+            {{ form.name.label_tag }}
+            {{ form.name }}
+        </div>
+        <div class="fieldWrapper">
+            {{ form.ischecked.errors }}
+            <input type="checkbox" name="ischecked" class="w3-check" id="id_ischecked" {% if form.initial.ischecked == '1' %} checked {% else %} '' {% endif %} >
+            {{ form.ischecked.label_tag }}
+        </div>
+        <div class="fieldWrapper">
+            {{ form.quantity.errors }}
+            {{ form.quantity.label_tag }}
+            {{ form.quantity }}
+        </div>
+        <div class="fieldWrapper">
+            {{ form.comment.errors }}
+            {{ form.comment.label_tag }}
+            {{ form.comment }}
+        </div>
         <button type="submit" class="w3-button w3-theme">Guardar</button>
     </form>
 </div>

@@ -13,3 +13,6 @@ footer {
     max-width: 300px;
     margin: 70px auto;
 }
+.no-decoration {
+    text-decoration: none;
+}

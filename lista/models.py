@@ -178,7 +178,7 @@ class Ingredient(models.Model):
     class Meta:
         managed = False
         db_table = 'ingredients'
-
+        ordering = ['ischecked', 'name']
 
 class Log(models.Model):
     message = models.CharField(max_length=200, primary_key=True)
