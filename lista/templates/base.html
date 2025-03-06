@@ -23,13 +23,15 @@
                 </a>
                 {% if user.is_authenticated %}
                 <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-                    <li>
-                        <a href="{% url 'ingredient_list' %}" class="nav-link px-2 link-body-emphasis">
-                            Principal
-                        </a>
-                    </li>
-                    <li><a href="#" class="nav-link px-2 link-body-emphasis">Comidas</a></li>
-                    <li><a href="#" class="nav-link px-2 link-body-emphasis">Otros</a></li>
+                    {% with request.resolver_match.url_name as url_name %}
+                        <li>
+                            <a href="{% url 'ingredient_list' %}" class="nav-link px-2 {% if 'ingredient' in url_name %} link-secondary {% endif %}">
+                                Principal
+                            </a>
+                        </li>
+                        <li><a href="#" class="nav-link px-2 {% if 'meal' in url_name %} link-secondary {% endif %}">Comidas</a></li>
+                        <li><a href="#" class="nav-link px-2 {% if 'other' in url_name %} link-secondary {% endif %}">Otros</a></li>
+                    {% endwith %}
                 </ul>
                 <div class="dropdown text-end">
                     <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle"
