@@ -18,44 +18,66 @@
     <header class="p-3 mb-3 border-bottom navbar-dark bg-dark">
         <div class="container">
             <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
-                <a href="{% url 'ingredient_list' %}"
-                    class="navbar-brand">
+                <a href="{% url 'ingredient_list' %}" class="navbar-brand">
                     ListaDLC
                 </a>
                 {% if user.is_authenticated %}
-                    <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-                        <li>
-                            <a href="{% url 'ingredient_list' %}" class="nav-link px-2 link-body-emphasis">
-                                Principal
-                            </a>
-                        </li>
-                        <li><a href="#" class="nav-link px-2 link-body-emphasis">Comidas</a></li>
-                        <li><a href="#" class="nav-link px-2 link-body-emphasis">Otros</a></li>
-                    </ul>
-                    <div class="dropdown text-end">
-                        <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle"
-                            data-bs-toggle="dropdown" aria-expanded="false">
-                            <span width="32" height="32" class="rounded-circle">{{ user.username|slice:":1"|upper }}</span>
+                <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+                    <li>
+                        <a href="{% url 'ingredient_list' %}" class="nav-link px-2 link-body-emphasis">
+                            Principal
                         </a>
-                        <ul class="dropdown-menu text-small">
-                            <li>
-                                <form method="POST" action="{% url 'logout' %}">
-                                    {% csrf_token %}
-                                    <button type="submit" class="dropdown-item btn btn-link">
-                                        Cerrar sesión
-                                    </button>
-                                </form>
-                            </li>
-                        </ul>
-                    </div>
+                    </li>
+                    <li><a href="#" class="nav-link px-2 link-body-emphasis">Comidas</a></li>
+                    <li><a href="#" class="nav-link px-2 link-body-emphasis">Otros</a></li>
+                </ul>
+                <div class="dropdown text-end">
+                    <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        <span width="32" height="32" class="rounded-circle">{{ user.username|slice:":1"|upper }}</span>
+                    </a>
+                    <ul class="dropdown-menu text-small">
+                        <li>
+                            <form method="POST" action="{% url 'logout' %}">
+                                {% csrf_token %}
+                                <button type="submit" class="dropdown-item btn btn-link">
+                                    Cerrar sesión
+                                </button>
+                            </form>
+                        </li>
+                    </ul>
+                </div>
                 {% endif %}
             </div>
         </div>
     </header>
+    <div class="text-center" id="loading">
+        <div class="spinner-border" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
     <!-- Content -->
     <div class="container my-5">
         {% block content %}
         {% endblock %}
+        <div class="modal fade" id="deleteModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+            aria-labelledby="deleteModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="deleteModalLabel">Ojito cuidao</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p></p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                        <a href="#" class="btn btn-danger" id="deleteButton">Aceptar</a>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     <!-- Footer -->
     <footer class="d-flex flex-wrap justify-content-between align-items-center p-3 border-top fixed-bottom bg-dark">
@@ -64,5 +86,13 @@
         </div>
     </footer>
     {% bootstrap_javascript %}
+    <script src="../static/js/snippets.js"></script>
 </body>
+<script>
+    window.onload = function () {
+        var loadingItem = document.getElementById('loading')
+        loadingItem.style.display = "none";
+    }
+</script>
+
 </html>

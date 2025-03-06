@@ -8,7 +8,8 @@
                 <form method="GET">
                     {% csrf_token %}
                     <label for="{{ form.search.id_for_label }}" class="form-label">{{ form.search.label_tag }}</label>
-                    <input type="text" class="form-control" id="{{ form.search.id_for_label }}" placeholder="Enter para buscar">
+                    <input type="text" class="form-control" id="{{ form.search.id_for_label }}"
+                        placeholder="Enter para buscar">
                     {{ form.search.errors }}
                 </form>
             </div>
@@ -24,7 +25,7 @@
             <thead class="table-dark">
                 <tr>
                     <th scope="col" class="table-fit text-center">Marcado</th>
-                    <th scope="col" class="table-fit text-center">Cantidad</th>
+                    <th scope="col" class="text-center">Cantidad</th>
                     <th scope="col">Nombre</th>
                     <th scope="col">Comentarios</th>
                     <th scope="col" class="table-fit">Acciones</th>
@@ -36,20 +37,32 @@
                     <td class="text-center">
                         <form method="POST" action="{% url 'ingredient_check' pk=ingredient.pk %}">
                             {% csrf_token %}
-                            <input type="checkbox" name="ischecked" onclick="this.form.submit()" class="form-check-input"
-                                id="id_ischecked" {% if ingredient.ischecked == '1' %} checked {% endif %}>
+                            <input type="checkbox" name="ischecked" onclick="this.form.submit()"
+                                class="form-check-input" id="id_ischecked" {% if ingredient.ischecked == '1' %} checked {% endif %}>
                         </form>
                     </td>
-                    <td class="text-center">{{ ingredient.quantity }}</td>
+                    <td class="text-center">
+                        <form method="POST" action="{% url 'ingredient_decrease' pk=ingredient.pk %}" class="table-fit d-inline">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-primary btn-sm">-</button>
+                        </form>
+                        <label class="d-inline">{{ ingredient.quantity }}</label>
+                        <form method="POST" action="{% url 'ingredient_increase' pk=ingredient.pk %}" class="table-fit d-inline">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-primary btn-sm">+</button>
+                        </form>
+                    </td>
                     <td>{{ ingredient.name }}</td>
                     <td>{{ ingredient.comment }}</td>
                     <td>
                         <a href="{% url 'ingredient_edit' pk=ingredient.pk %}" class="btn btn-warning btn-sm">
                             <i class="fa-solid fa-pen-to-square"></i>
                         </a>
-                        <a href="{% url 'ingredient_edit' pk=ingredient.pk %}" class="btn btn-danger btn-sm">
+                        <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal"
+                            data-bs-target="#deleteModal" data-bs-name="{{ ingredient.name }}"
+                            data-bs-function="ingredient" data-bs-id="{{ ingredient.pk }}">
                             <i class="fa-solid fa-trash"></i>
-                        </a>
+                        </button>
                     </td>
                 </tr>
                 {% endfor %}
@@ -57,6 +70,4 @@
         </table>
     </div>
 </div>
-
-
 {% endblock %}

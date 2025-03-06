@@ -29,6 +29,15 @@ class CheckIngredientForm(forms.ModelForm):
         model = Ingredient
         fields = ('ischecked',)
 
+class QuantityIngredientForm(forms.ModelForm):
+    quantityChanged = forms.IntegerField(
+        label='', 
+        required=False)
+
+    class Meta:
+        model = Ingredient
+        fields = ('quantityChanged',)
+
 class IngredientForm(forms.ModelForm):
     name = forms.CharField(label='Nombre', max_length=200)
     ischecked = forms.BooleanField(label='¿Está marcado?', required=False)

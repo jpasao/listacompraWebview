@@ -6,24 +6,26 @@
     <form method="POST">
         {% csrf_token %}
         <div class="mb-3">
-            {{ form.name.errors }}
             <label for="{{ form.name.id_for_label }}" class="form-label">{{ form.name.label_tag }}</label>
-            <input type="text" class="form-control" id="{{ form.name.id_for_label }}" value="{% if form.name.value %} {{form.name.value}} {% endif %}">
+            <input type="text" class="form-control" id="{{ form.name.id_for_label }}" name="{{ form.name.html_name }}" value="{% if form.name.value %} {{form.name.value}} {% endif %}">
+            <div class="text-danger">{{ form.name.errors }}</div>
         </div>
         <div class="mb-3 form-check">
-            {{ form.ischecked.errors }}
-            <input type="checkbox" name="ischecked" class="form-check-input" id="id_ischecked" {% if form.initial.ischecked == '1' %} checked {% endif %} >
-            <label for="{{ form.name.id_for_label }}" class="form-check-label">{{ form.ischecked.label_tag }}</label>
+            <input type="checkbox" class="form-check-input" id="{{ form.ischecked.id_for_label }}" name="{{ form.ischecked.html_name }}" {% if form.initial.ischecked == '1' %} checked {% endif %} >
+            <label for="{{ form.ischecked.id_for_label }}" class="form-check-label">{{ form.ischecked.label_tag }}</label>
+            <div class="text-danger">{{ form.ischecked.errors }}</div>
         </div>
         <div class="mb-3">
-            {{ form.quantity.errors }}
             <label for="{{ form.quantity.id_for_label }}" class="form-label">{{ form.quantity.label_tag }}</label>
-            <input type="number" class="form-control" id="{{ form.quantity.id_for_label }}" value="{{ form.quantity.value }}">
+            <input type="number" class="form-control" id="{{ form.quantity.id_for_label }}" name="{{ form.quantity.html_name }}" value="{{ form.quantity.value }}">
+            <div class="text-danger">{{ form.quantity.errors }}</div>
         </div>
         <div class="mb-3">
             <label for="{{ form.comment.id_for_label }}" class="form-label">{{ form.comment.label_tag }}</label>
-            <textarea type="text" class="form-control" id="{{ form.comment.id_for_label }}">{% if form.comment.value %} {{form.comment.value}} {% endif %}</textarea>
-            {{ form.comment.errors }}
+            <textarea type="text" class="form-control" id="{{ form.comment.id_for_label }}" name="{{ form.comment.html_name }}">
+                {% if form.comment.value %} {{form.comment.value}} {% endif %}
+            </textarea>
+            <div class="text-danger">{{ form.comment.errors }}</div>
         </div>
         <button type="submit" class="btn btn-primary">Guardar</button>
     </form>

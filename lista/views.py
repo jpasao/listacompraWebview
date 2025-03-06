@@ -3,26 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 
 from .forms import *
-from .models import Author
 from .models import Ingredient
-
-@login_required
-def author_list(request):
-    authors = Author.objects.order_by('authorid')
-    return render(request, 'author/author_list.html', {'authors': authors})
-
-@login_required
-def author_add(request):
-    if request.method == 'POST':
-        form = AuthorForm(request.POST)
-        if form.is_valid():
-            author = form.save()
-            author.save()
-            return redirect('author_list')
-    else:
-        form = AuthorForm()
-
-    return render(request, 'author/author_edit.html', {'form': form})
 
 @login_required
 def ingredient_list(request):
@@ -54,7 +35,7 @@ def ingredient_new(request):
             ingredient.save()
             return redirect('ingredient_list')
     else:
-        form = IngredientForm()
+        form = IngredientForm(request.POST)
 
     return render(request, 'ingredient/ingredient_edit.html', {'form': form})
 
@@ -86,3 +67,32 @@ def ingredient_check(request, pk):
 
     return redirect('ingredient_list')
 
+@login_required
+def ingredient_increase(request, pk):
+    return ingredient_modify_quantity(request, pk, True)
+
+@login_required
+def ingredient_decrease(request, pk):
+    return ingredient_modify_quantity(request, pk, False)
+
+def ingredient_modify_quantity(request, pk, increase):
+    item = get_object_or_404(Ingredient, pk=pk)
+    if request.method == 'POST':
+        form = QuantityIngredientForm(request.POST, instance=item)
+        if form.is_valid():
+            item.isproduct = '\x01'
+            increment = 1 if increase else - 1
+            item.quantity += increment 
+            if item.quantity == 0: item.quantity = 1
+            item = form.save()
+    else: 
+        form = QuantityIngredientForm(instance=item)
+
+    return redirect('ingredient_list')
+
+@login_required
+def ingredient_delete(request, pk):
+    item = get_object_or_404(Ingredient, pk=pk)
+    item.delete()
+
+    return redirect('ingredient_list')
