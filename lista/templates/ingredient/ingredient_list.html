@@ -1,48 +1,62 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="w3-row w3-border w3-container w3-padding w3-margin">
-    <div class="w3-threequarter w3-container w3-left-align">
-        <div class="w3-section">
-            <form method="GET">
-                {% csrf_token %}
-                {{ form.as_p }}
-            </form>
+<div class="card">
+    <div class="card-body">
+        <div class="row g-3">
+            <div class="col-9">
+                <form method="GET">
+                    {% csrf_token %}
+                    <label for="{{ form.search.id_for_label }}" class="form-label">{{ form.search.label_tag }}</label>
+                    <input type="text" class="form-control" id="{{ form.search.id_for_label }}" placeholder="Enter para buscar">
+                    {{ form.search.errors }}
+                </form>
+            </div>
+            <div class="col-3 d-flex justify-content-end">
+                <a class="btn btn-primary align-self-end" href="{% url 'ingredient_new' %}">Añadir nuevo</a>
+            </div>
         </div>
     </div>
-    <div class="w3-quarter w3-container w3-right-align">
-        <a class="w3-button w3-theme" style="margin-top: 5%" href="{% url 'ingredient_new' %}">Añadir nuevo</a>
+</div>
+<div class="card my-3">
+    <div class="card-body">
+        <table class="table table-hover table-bordered">
+            <thead class="table-dark">
+                <tr>
+                    <th scope="col" class="table-fit text-center">Marcado</th>
+                    <th scope="col" class="table-fit text-center">Cantidad</th>
+                    <th scope="col">Nombre</th>
+                    <th scope="col">Comentarios</th>
+                    <th scope="col" class="table-fit">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for ingredient in ingredients %}
+                <tr class="{% if ingredient.ischecked == '1' %} opacity-50 {% else %} opacity-100 {% endif %}">
+                    <td class="text-center">
+                        <form method="POST" action="{% url 'ingredient_check' pk=ingredient.pk %}">
+                            {% csrf_token %}
+                            <input type="checkbox" name="ischecked" onclick="this.form.submit()" class="form-check-input"
+                                id="id_ischecked" {% if ingredient.ischecked == '1' %} checked {% endif %}>
+                        </form>
+                    </td>
+                    <td class="text-center">{{ ingredient.quantity }}</td>
+                    <td>{{ ingredient.name }}</td>
+                    <td>{{ ingredient.comment }}</td>
+                    <td>
+                        <a href="{% url 'ingredient_edit' pk=ingredient.pk %}" class="btn btn-warning btn-sm">
+                            <i class="fa-solid fa-pen-to-square"></i>
+                        </a>
+                        <a href="{% url 'ingredient_edit' pk=ingredient.pk %}" class="btn btn-danger btn-sm">
+                            <i class="fa-solid fa-trash"></i>
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
 </div>
-<div class="w3-row w3-border w3-container w3-margin w3-padding-top-32">
-    <table class="w3-table w3-striped w3-bordered w3-hoverable">
-        <thead>
-            <tr class="w3-theme">
-                <th>Marcado</th>
-                <th>Cantidad</th>
-                <th>Nombre</th>
-                <th>Comentarios</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for ingredient in ingredients %}
-            <tr>
-                <td>
-                    <form method="POST" action="{% url 'ingredient_check' pk=ingredient.pk %}">
-                        {% csrf_token %}
-                        <input type="checkbox" name="ischecked" onclick="this.form.submit()" class="w3-check" id="id_ischecked" {% if ingredient.ischecked == '1' %} checked {% else %} '' {% endif %} >
-                    </form>
-                </td>
-                <td>{{ ingredient.quantity }}</td>
-                <td>{{ ingredient.name }}</td>
-                <td>{{ ingredient.comment }}</td>
-                <td>
-                    <a href="{% url 'ingredient_edit' pk=ingredient.pk %}" class="w3-bar-item w3-button w3-hover-theme">Editar</a>
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-</div>
+
+
 {% endblock %}

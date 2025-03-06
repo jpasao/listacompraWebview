@@ -19,8 +19,7 @@ class FilterIngredientForm(forms.ModelForm):
 class CheckIngredientForm(forms.ModelForm):
     ischecked = forms.BooleanField(
         label='', 
-        required=False,
-        widget=forms.CheckboxInput(attrs={'class': 'w3-check'}))
+        required=False)
 
     def clean_ischecked(self):
         data = self.cleaned_data['ischecked']
@@ -48,9 +47,9 @@ class IngredientForm(forms.ModelForm):
                 del(kwargs['initial']['ischecked'])
         super().__init__(*args, **kwargs)
         self.fields['ischecked'].initial = True if self.fields['ischecked'] == '1' else False
-        self.fields['name'].widget.attrs['class'] = 'w3-input'
-        self.fields['quantity'].widget.attrs['class'] = 'w3-input'
-        self.fields['comment'].widget.attrs['class'] = 'w3-input'
+        self.fields['name'].widget.attrs['class'] = 'form-control'
+        self.fields['quantity'].widget.attrs['class'] = 'form-control'
+        self.fields['comment'].widget.attrs['class'] = 'form-control'
 
     class Meta:
         model = Ingredient

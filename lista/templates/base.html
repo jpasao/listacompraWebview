@@ -1,101 +1,68 @@
 {% load static %}
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>ListaDLC</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="{% static 'css/main.css' %}">
-        <link rel="stylesheet" href="{% static 'css/lista.css' %}">
-        <link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}">
-    </head>
-    <body>
-        <!-- Side Navigation menu -->
-        <nav class="w3-sidebar w3-collapse w3-white w3-animate-left" style="z-index:3;width:300px" id="mySidebar">
-            <br>
-            <div class="w3-container">
-                <h5>¿Qué quieres?</h5>
-            </div>
-            <div class="w3-bar-block">
-                <a href="#" class="w3-bar-item w3-button w3-padding-16 w3-hide-large w3-dark-grey w3-hover-black" onclick="w3_close()" title="close menu">
-                    <i class="fa fa-remove fa-fw"></i>  CERRAR ESTO
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>ListaDLC</title>
+    {% load bootstrap5 %}
+    {% bootstrap_css %}
+    <link rel="stylesheet" href="{% static 'css/fontawesome.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/solid.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/lista.css' %}">
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="p-3 mb-3 border-bottom navbar-dark bg-dark">
+        <div class="container">
+            <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+                <a href="{% url 'ingredient_list' %}"
+                    class="navbar-brand">
+                    ListaDLC
                 </a>
                 {% if user.is_authenticated %}
-                    <a href="{% url 'ingredient_list' %}" class="w3-bar-item w3-button w3-padding">Ir a la lista principal</a>
-                    <a href="#" class="w3-bar-item w3-button w3-padding">Ver las comidas de la semana</a>
-                    <a href="#" class="w3-bar-item w3-button w3-padding">Ir a la lista de otras cosas</a>
-                {% else %}
-                    <label class="w3-bar-item">Circule; aquí no hay nada que ver</label>
+                    <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+                        <li>
+                            <a href="{% url 'ingredient_list' %}" class="nav-link px-2 link-body-emphasis">
+                                Principal
+                            </a>
+                        </li>
+                        <li><a href="#" class="nav-link px-2 link-body-emphasis">Comidas</a></li>
+                        <li><a href="#" class="nav-link px-2 link-body-emphasis">Otros</a></li>
+                    </ul>
+                    <div class="dropdown text-end">
+                        <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            <span width="32" height="32" class="rounded-circle">{{ user.username|slice:":1"|upper }}</span>
+                        </a>
+                        <ul class="dropdown-menu text-small">
+                            <li>
+                                <form method="POST" action="{% url 'logout' %}">
+                                    {% csrf_token %}
+                                    <button type="submit" class="dropdown-item btn btn-link">
+                                        Cerrar sesión
+                                    </button>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
                 {% endif %}
             </div>
-        </nav>
-
-        <!-- Overlay effect when opening sidebar on small screens -->
-        <div class="w3-overlay w3-hide-large w3-animate-opacity" onclick="w3_close()" style="cursor:pointer" title="close side menu" id="myOverlay"></div>
-
-        <!-- Header -->
-        <header class="w3-container w3-theme w3-padding" id="myHeader">
-            <div class="w3-row">
-                <div class="w3-third">
-                    <i onclick="w3_open()" class="fa fa-bars w3-xlarge w3-button w3-theme"></i>
-                </div>
-                <div class="w3-third">
-                    <a href="{% url 'ingredient_list' %}" class="no-decoration">
-                        <span class="w3-xxxlarge w3-animate-bottom center">ListaDLC</span>
-                    </a>
-                    
-                </div>
-                <div class="w3-third">
-                    <span class="w3-bar-item w3-right">
-                        {% if user.is_authenticated %}
-                            <form method="POST" action="{% url 'logout' %}">
-                                {% csrf_token %}
-                                <div class="w3-tooltip w3-right">
-                                    <span class="w3-text w3-theme-light w3-padding">Cerrar sesión</span> 
-                                    <button type="submit" class="w3-button w3-theme-d3 w3-circle">
-                                        {{ user.username|slice:":1"|upper }}
-                                    </button>
-                                </div>
-                            </form>
-                        {% endif %}
-                    </span>
-                </div>
-            </div>
-        </header>
-        <div class="w3-row-padding w3-center w3-margin-top">
-            {% block content %}
-            {% endblock %}
         </div>
-        <!-- Footer -->
-        <footer class="w3-container w3-theme-dark">
-            <p class="center">Desde 2025 facilitando la lista de la compra</p>
-            <div style="position:relative;bottom:45px;" class="w3-tooltip w3-right">
-                <span class="w3-text w3-theme-light w3-padding">¡Arriba con ella!</span>    
-                <a class="w3-text-white" href="#myHeader">
-                    <span class="w3-xlarge"><i class="fa fa-chevron-circle-up"></i></span>
-                </a>
-            </div>
-        </footer>
-        <script>
-            // Get the Sidebar
-            var mySidebar = document.getElementById("mySidebar");
-            // Get the DIV with overlay effect
-            var overlayBg = document.getElementById("myOverlay");
-
-            // Side navigation
-            function w3_open() {
-                if (mySidebar.style.display === 'block') {
-                    mySidebar.style.display = 'none';
-                    overlayBg.style.display = "none";
-                } else {
-                    mySidebar.style.display = 'block';
-                    overlayBg.style.display = "block";
-                }
-            }
-            function w3_close() {
-                mySidebar.style.display = "none";
-                overlayBg.style.display = "none";
-            }
-        </script>
-    </body>
+    </header>
+    <!-- Content -->
+    <div class="container my-5">
+        {% block content %}
+        {% endblock %}
+    </div>
+    <!-- Footer -->
+    <footer class="d-flex flex-wrap justify-content-between align-items-center p-3 border-top fixed-bottom bg-dark">
+        <div class="col-md-4 d-flex align-items-center">
+            <p class="mb-3 mb-md-0" style="color: gray;">Desde 2025 facilitando la lista de la compra</p>
+        </div>
+    </footer>
+    {% bootstrap_javascript %}
+</body>
 </html>
