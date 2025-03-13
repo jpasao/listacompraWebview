@@ -6,57 +6,66 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>ListaDLC</title>
-    {% load bootstrap5 %}
+    {% load django_bootstrap5 %}
     {% bootstrap_css %}
     <link rel="stylesheet" href="{% static 'css/fontawesome.min.css' %}">
     <link rel="stylesheet" href="{% static 'css/solid.min.css' %}">
+    <link href="{% static 'dark_mode_switch/dark-mode-switch.css' %}" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="{% static 'css/lista.css' %}">
 </head>
 
 <body>
+    {# Display django.contrib.messages as Bootstrap alerts #}
+    {% bootstrap_messages %}
     <!-- Header -->
-    <header class="p-3 mb-3 border-bottom navbar-dark bg-dark">
-        <div class="container">
-            <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
-                <a href="{% url 'home' %}" class="navbar-brand">
-                    ListaDLC
+    <nav class="navbar navbar-expand bg-secondary-subtle">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{% url 'home' %}">
+                ListaDLC
+            </a>
+            {% if user.is_authenticated %}
+            <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+                {% with request.resolver_match.url_name as url_name %}
+                    <li>
+                        <a href="{% url 'ingredient_list' %}" class="nav-link px-2 {% if 'ingredient' in url_name %} link-secondary {% endif %}">
+                            Principal
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'meal_list' %}" class="nav-link px-2 {% if 'meal' in url_name %} link-secondary {% endif %}">
+                            Comidas
+                        </a>
+                    </li>
+                    <li><a href="#" class="nav-link px-2 {% if 'other' in url_name %} link-secondary {% endif %}">Otros</a></li>
+                {% endwith %}
+            </ul>
+            <div class="dropdown">
+                <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle"
+                    data-bs-toggle="dropdown" aria-expanded="false">
+                    <span width="32" height="32" class="rounded-circle">{{ user.username|slice:":1"|upper }}</span>
                 </a>
-                {% if user.is_authenticated %}
-                <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-                    {% with request.resolver_match.url_name as url_name %}
-                        <li>
-                            <a href="{% url 'ingredient_list' %}" class="nav-link px-2 {% if 'ingredient' in url_name %} link-secondary {% endif %}">
-                                Principal
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{% url 'meal_list' %}" class="nav-link px-2 {% if 'meal' in url_name %} link-secondary {% endif %}">
-                                Comidas
-                            </a>
-                        </li>
-                        <li><a href="#" class="nav-link px-2 {% if 'other' in url_name %} link-secondary {% endif %}">Otros</a></li>
-                    {% endwith %}
+                <ul class="dropdown-menu dropdown-menu-end text-small">
+                    <li>
+                        <form method="POST" action="{% url 'logout' %}">
+                            {% csrf_token %}
+                            <button type="submit" class="dropdown-item btn btn-link">
+                                Cerrar sesión
+                            </button>
+                        </form>
+                    </li>
                 </ul>
-                <div class="dropdown text-end">
-                    <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle"
-                        data-bs-toggle="dropdown" aria-expanded="false">
-                        <span width="32" height="32" class="rounded-circle">{{ user.username|slice:":1"|upper }}</span>
-                    </a>
-                    <ul class="dropdown-menu text-small">
-                        <li>
-                            <form method="POST" action="{% url 'logout' %}">
-                                {% csrf_token %}
-                                <button type="submit" class="dropdown-item btn btn-link">
-                                    Cerrar sesión
-                                </button>
-                            </form>
-                        </li>
-                    </ul>
-                </div>
-                {% endif %}
+            </div>
+            {% endif %}
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav" style="display: contents !important;">
+                <ul class="navbar-nav">
+                    {% include 'dark_mode_switch/dark_mode_switch.html' %}
+                </ul>
             </div>
         </div>
-    </header>
+    </nav>
     <div class="text-center" id="loading">
         <div class="spinner-border" role="status">
             <span class="visually-hidden">Loading...</span>
@@ -92,6 +101,7 @@
         </div>
     </footer>
     {% bootstrap_javascript %}
+    <script src="{% static 'dark_mode_switch/dark-mode-switch.js' %}"></script>
     <script src="../static/js/snippets.js"></script>
     <script>
       const loadingItem = document.getElementById('loading')

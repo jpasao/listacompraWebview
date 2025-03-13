@@ -30,7 +30,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'lista',
-    'bootstrap5',
+    'django_bootstrap5',
+    'dark_mode_switch',
 ]
 
 MIDDLEWARE = [
