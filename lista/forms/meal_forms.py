@@ -4,7 +4,7 @@ from ..models import Meal
 
 class FilterMealForm(forms.ModelForm):
     search = forms.CharField(
-        label='Busca por nombre o comentario', 
+        label='Busca por nombre', 
         required=False, 
         widget=forms.TextInput(attrs={'placeholder': 'Enter para buscar'}))
     class Meta:

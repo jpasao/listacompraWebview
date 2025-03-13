@@ -19,6 +19,7 @@ def meal_list(request):
         if search:
             lunches = lunches.filter(name__icontains=search)
             dinners = dinners.filter(name__icontains=search)
+            possible_meals = possible_meals.filter(name__icontains=search)
 
     return render(
         request,
