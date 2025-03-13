@@ -24,11 +24,11 @@
         <table class="table table-hover table-bordered">
             <thead class="table-dark">
                 <tr>
-                    <th scope="col" class="table-fit text-center">Marcado</th>
-                    <th scope="col" class="text-center">Cantidad</th>
+                    <th scope="col" class="column-fit text-center">Marcado</th>
+                    <th scope="col" class="text-center fit-2-icons">Cantidad</th>
                     <th scope="col">Nombre</th>
                     <th scope="col">Comentarios</th>
-                    <th scope="col" class="table-fit">Acciones</th>
+                    <th scope="col" class="fit-2-icons">Acciones</th>
                 </tr>
             </thead>
             <tbody>
@@ -42,12 +42,12 @@
                         </form>
                     </td>
                     <td class="text-center">
-                        <form method="POST" action="{% url 'ingredient_decrease' pk=ingredient.pk %}" class="table-fit d-inline">
+                        <form method="POST" action="{% url 'ingredient_decrease' pk=ingredient.pk %}" class="column-fit d-inline">
                             {% csrf_token %}
                             <button type="submit" class="btn btn-primary btn-sm">-</button>
                         </form>
                         <label class="d-inline">{{ ingredient.quantity }}</label>
-                        <form method="POST" action="{% url 'ingredient_increase' pk=ingredient.pk %}" class="table-fit d-inline">
+                        <form method="POST" action="{% url 'ingredient_increase' pk=ingredient.pk %}" class="column-fit d-inline">
                             {% csrf_token %}
                             <button type="submit" class="btn btn-primary btn-sm">+</button>
                         </form>

@@ -1,11 +1,6 @@
 from django import forms
 
-from .models import Author, Ingredient
-
-class AuthorForm(forms.ModelForm):
-    class Meta:
-        model = Author
-        fields = ('name', 'image',)
+from ..models import Ingredient
 
 class FilterIngredientForm(forms.ModelForm):
     search = forms.CharField(

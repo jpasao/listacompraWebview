@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="form-signin w-50 p-3 m-auto" style="min-width:300px">
+    <h2>{% if form.name.value %} Editar {% else %} Nuevo {% endif %} ítem</h2>
+    <form method="POST">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="{{ form.name.id_for_label }}" class="form-label">{{ form.name.label_tag }}</label>
+            <input type="text" class="form-control" id="{{ form.name.id_for_label }}" name="{{ form.name.html_name }}" value="{% if form.name.value %} {{form.name.value}} {% endif %}">
+            <div class="text-danger">{{ form.name.errors }}</div>
+        </div>
+        <div class="mb-3 form-check">
+            <input type="checkbox" class="form-check-input" id="{{ form.ischecked.id_for_label }}" name="{{ form.ischecked.html_name }}" {% if form.initial.ischecked == 1 %} checked {% endif %}>
+            <label for="{{ form.ischecked.id_for_label }}" class="form-check-label">{{ form.ischecked.label_tag }}</label>
+            <div class="text-danger">{{ form.ischecked.errors }}</div>
+        </div>
+        <div class="mb-3 form-check">
+            <input type="checkbox" class="form-check-input" id="{{ form.islunch.id_for_label }}" name="{{ form.islunch.html_name }}" {% if form.initial.islunch == 1 %} checked {% endif %}>
+            <label for="{{ form.islunch.id_for_label }}" class="form-check-label">{{ form.islunch.label_tag }}</label>
+            <div class="text-danger">{{ form.islunch.errors }}</div>
+        </div>
+        <button type="submit" class="btn btn-primary">Guardar</button>
+        <a href="{% url 'meal_list' %}" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>
+
+{% endblock %}

@@ -1,0 +1,143 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="card">
+    <div class="card-body">
+        <div class="row g-3">
+            <div class="col-9">
+                <form method="GET">
+                    {% csrf_token %}
+                    <label for="{{ form.search.id_for_label }}" class="form-label">{{ form.search.label_tag }}</label>
+                    <input type="text" class="form-control" id="{{ form.search.id_for_label }}"
+                        placeholder="Enter para buscar">
+                    {{ form.search.errors }}
+                </form>
+            </div>
+            <div class="col-3 d-flex justify-content-end">
+                <a class="btn btn-primary align-self-end" href="{% url 'meal_new' %}">Añadir nuevo</a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="card my-3">
+    <div class="card-body">
+        <div class="row">
+            <div class="col">
+                <div class="row">
+                    <div class="col">
+                        <table class="table table-hover table-bordered">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th scope="col">Almuerzos</th>
+                                    <th scope="col" class="fit-2-icons">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for lunch in lunches %}
+                                <tr>
+                                    <td>
+                                        <form method="POST" action="{% url 'meal_check' pk=lunch.pk %}" class="column-fit d-inline">
+                                            {% csrf_token %}
+                                            <input type="checkbox" name="ischecked" onclick="this.form.submit()"
+                                                class="form-check-input" id="id_ischecked" {% if meal.ischecked == 1 %} checked {% endif %}>
+                                        </form>
+                                        {{ lunch.name }}
+                                    </td>
+                                    <td>
+                                        <a href="{% url 'meal_edit' pk=lunch.pk %}" class="btn btn-warning btn-sm">
+                                            <i class="fa-solid fa-pen-to-square"></i>
+                                        </a>
+                                        <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal"
+                                            data-bs-target="#deleteModal" data-bs-name="{{ lunch.name }}"
+                                            data-bs-function="meal" data-bs-id="{{ lunch.pk }}">
+                                            <i class="fa-solid fa-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col">
+                        <table class="table table-hover table-bordered">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th scope="col">Cenas</th>
+                                    <th scope="col" class="fit-2-icons">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for dinner in dinners %}
+                                <tr>
+                                    <td>
+                                        <form method="POST" action="{% url 'meal_check' pk=dinner.pk %}" class="column-fit d-inline">
+                                            {% csrf_token %}
+                                            <input type="checkbox" name="ischecked" onclick="this.form.submit()"
+                                                class="form-check-input" id="id_ischecked" {% if meal.ischecked == 1 %} checked {% endif %}>
+                                        </form>
+                                        {{ dinner.name }}
+                                    </td>
+                                    <td>
+                                        <a href="{% url 'meal_edit' pk=dinner.pk %}" class="btn btn-warning btn-sm">
+                                            <i class="fa-solid fa-pen-to-square"></i>
+                                        </a>
+                                        <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal"
+                                            data-bs-target="#deleteModal" data-bs-name="{{ dinner.name }}"
+                                            data-bs-function="meal" data-bs-id="{{ dinner.pk }}">
+                                            <i class="fa-solid fa-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="row">
+                    <div class="col">
+                        <table class="table table-hover table-bordered">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th scope="col">Posibles comidas</th>
+                                    <th scope="col" class="fit-4-icons">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for possible_meal in possible_meals %}
+                                <tr>
+                                    <td>{{ possible_meal.name }}</td>
+                                    <td>
+                                        <a href="{% url 'meal_edit' pk=possible_meal.pk %}" class="btn btn-warning btn-sm">
+                                            <i class="fa-solid fa-pen-to-square"></i>
+                                        </a>
+                                        <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal"
+                                            data-bs-target="#deleteModal" data-bs-name="{{ possible_meal.name }}"
+                                            data-bs-function="meal" data-bs-id="{{ possible_meal.pk }}">
+                                            <i class="fa-solid fa-trash"></i>
+                                        </button>
+                                        <form method="POST" action="{% url 'meal_choose' pk=possible_meal.pk %}" class="column-fit d-inline">
+                                            {% csrf_token %}
+                                            <button type="submit" class="btn btn-success btn-sm">
+                                                <i class="fa-solid fa-sun"></i>
+                                            </button>
+                                        </form>
+                                        <form method="POST" action="{% url 'meal_choose_dinner' pk=possible_meal.pk %}" class="column-fit d-inline">
+                                            {% csrf_token %}
+                                            <button type="submit" class="btn btn-info btn-sm">
+                                                <i class="fa-solid fa-moon"></i>
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

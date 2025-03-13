@@ -1,9 +1,9 @@
-from django.shortcuts import render, get_list_or_404, get_object_or_404, redirect
+from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 
-from .forms import *
-from .models import Ingredient
+from ..forms.ingredient_forms import *
+from ..models import Ingredient
 
 @login_required
 def ingredient_list(request):
@@ -14,7 +14,9 @@ def ingredient_list(request):
     if form.is_valid():
         search = form.cleaned_data.get('search')
         if search:
-            ingredients = ingredients.filter(Q(name__icontains=search) | Q(comment__icontains=search))
+            ingredients = (ingredients
+                           .filter(Q(name__icontains=search) | Q(comment__icontains=search))
+                           .order_by('name'))
 
     return render(
         request, 

@@ -1,3 +1,9 @@
-.table-fit {
-    width: 10%;
-  }
+.column-fit {
+    width: 1px;
+}
+.fit-2-icons {
+  width: 90px;
+}
+.fit-4-icons {
+  width: 155px;
+}

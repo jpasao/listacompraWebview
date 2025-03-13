@@ -18,7 +18,7 @@
     <header class="p-3 mb-3 border-bottom navbar-dark bg-dark">
         <div class="container">
             <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
-                <a href="{% url 'ingredient_list' %}" class="navbar-brand">
+                <a href="{% url 'home' %}" class="navbar-brand">
                     ListaDLC
                 </a>
                 {% if user.is_authenticated %}
@@ -29,7 +29,11 @@
                                 Principal
                             </a>
                         </li>
-                        <li><a href="#" class="nav-link px-2 {% if 'meal' in url_name %} link-secondary {% endif %}">Comidas</a></li>
+                        <li>
+                            <a href="{% url 'meal_list' %}" class="nav-link px-2 {% if 'meal' in url_name %} link-secondary {% endif %}">
+                                Comidas
+                            </a>
+                        </li>
                         <li><a href="#" class="nav-link px-2 {% if 'other' in url_name %} link-secondary {% endif %}">Otros</a></li>
                     {% endwith %}
                 </ul>
@@ -89,12 +93,9 @@
     </footer>
     {% bootstrap_javascript %}
     <script src="../static/js/snippets.js"></script>
+    <script>
+      const loadingItem = document.getElementById('loading')
+      loadingItem.style.display = 'none'
+    </script>
 </body>
-<script>
-    window.onload = function () {
-        var loadingItem = document.getElementById('loading')
-        loadingItem.style.display = "none";
-    }
-</script>
-
 </html>
