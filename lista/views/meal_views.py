@@ -1,16 +1,18 @@
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import render, get_object_or_404, redirect, get_list_or_404
 from django.contrib.auth.decorators import login_required
-from django.db.models import Q
+from django.http import JsonResponse
 
 from ..forms.meal_forms import *
-from ..models import Meal
+from ..models import Meal, Ingredient, Mealingredient
+
 
 @login_required
 def meal_list(request):
     form = FilterMealForm(request.GET)
     meals = Meal.objects.all()
+    ingredients = Ingredient.objects.defer().order_by('name')
     current_meals = meals.filter(ischecked__exact=0)
-    possible_meals = meals.filter(ischecked__exact=1)
+    possible_meals = meals.filter(ischecked__exact=1).order_by('name')
     lunches = current_meals.filter(islunch__exact=1).order_by('name')
     dinners = current_meals.filter(islunch__exact=0).order_by('name')
 
@@ -28,6 +30,7 @@ def meal_list(request):
             'lunches': lunches,
             'dinners': dinners,
             'possible_meals': possible_meals,
+            'ingredients': ingredients,
             'form': form
         })
 
@@ -94,5 +97,37 @@ def meal_check(request, pk):
 def meal_delete(_, pk):
     item = get_object_or_404(Meal, pk=pk)
     item.delete()
+
+    return redirect('meal_list')
+
+@login_required
+def meal_get_ingredients(request, pk):
+    meal_ingredients = Mealingredient.objects.filter(mealid__exact=pk)
+    ingredients = {}
+    items = []
+    for item in meal_ingredients:
+        items.append(item.ingredientid_id)
+    ingredients['data'] = items
+
+    return JsonResponse(ingredients)
+
+@login_required
+def meal_set_ingredients(request, pk):
+    if request.method == 'POST':
+        form = MealIngredientsForm(request.POST)
+
+        if form.is_valid():
+            items_to_delete = Mealingredient.objects.filter(mealid__exact=pk)
+            if items_to_delete.count() > 0:
+                items_to_delete.delete()
+
+            data = form.cleaned_data['ingredients']['data']
+            deserialized = set(data)
+            for item in deserialized:
+                meal = get_object_or_404(Meal, pk=pk)
+                ingredient = get_object_or_404(Ingredient, pk=item)
+                Mealingredient.objects.create(mealid=meal, ingredientid=ingredient)
+    else:
+        form = MealIngredientsForm(request.POST)
 
     return redirect('meal_list')

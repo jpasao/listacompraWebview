@@ -9,4 +9,6 @@ meal_urlpatterns = [
     path('meal/<int:pk>/choose_dinner/', meal_views.meal_choose_dinner, name='meal_choose_dinner'),
     path('meal/<int:pk>/check/', meal_views.meal_check, name='meal_check'),
     path('meal/<int:pk>/delete/', meal_views.meal_delete, name='meal_delete'),
+    path('meal/<int:pk>/ingredients/', meal_views.meal_get_ingredients, name='meal_get_ingredients'),
+    path('meal/<int:pk>/ingredients/save/', meal_views.meal_set_ingredients, name='meal_set_ingredients'),
 ]

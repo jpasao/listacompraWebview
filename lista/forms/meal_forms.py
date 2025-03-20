@@ -1,6 +1,6 @@
 from django import forms
 
-from ..models import Meal
+from ..models import Meal, Mealingredient
 
 class FilterMealForm(forms.ModelForm):
     search = forms.CharField(
@@ -45,6 +45,13 @@ class ChooseMealForm(forms.ModelForm):
     class Meta:
         model = Meal
         fields = ('islunch',)
+
+class MealIngredientsForm(forms.ModelForm):
+    ingredients = forms.JSONField()
+
+    class Meta:
+        model = Mealingredient
+        fields = ('ingredients',)
 
 class CheckMealForm(forms.ModelForm):
     ischecked = forms.BooleanField(

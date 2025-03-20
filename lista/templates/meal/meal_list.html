@@ -22,23 +22,23 @@
         </div>
     </div>
 </div>
-<div class="card my-3">
+<div class="card my-3 fit-height overflow-auto">
     <div class="card-body">
         <div class="row">
             <div class="col">
                 <div class="row">
                     <div class="col">
                         <table class="table table-hover table-bordered">
-                            <thead class="table-dark">
-                                <tr>
+                            <thead>
+                                <tr class="table-secondary">
                                     <th scope="col">Almuerzos</th>
-                                    <th scope="col" class="fit-2-icons">Acciones</th>
+                                    <th scope="col" class="fit-3-icons">Acciones</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {% for lunch in lunches %}
                                 <tr>
-                                    <td>
+                                    <td onclick="this.firstElementChild.submit()" role="button">
                                         <form method="POST" action="{% url 'meal_check' pk=lunch.pk %}" class="column-fit d-inline">
                                             {% csrf_token %}
                                             <input type="checkbox" name="ischecked" onclick="this.form.submit()"
@@ -47,12 +47,17 @@
                                         {{ lunch.name }}
                                     </td>
                                     <td>
+                                        <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal"
+                                            data-bs-target="#globalModal" data-bs-name="{{ lunch.name }}"
+                                            data-bs-function="meal" data-bs-id="{{ lunch.pk }}" data-bs-operation="ingredients">
+                                            <i class="fa-solid fa-drumstick-bite"></i>
+                                        </button>
                                         <a href="{% url 'meal_edit' pk=lunch.pk %}" class="btn btn-warning btn-sm">
                                             <i class="fa-solid fa-pen-to-square"></i>
                                         </a>
                                         <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal"
-                                            data-bs-target="#deleteModal" data-bs-name="{{ lunch.name }}"
-                                            data-bs-function="meal" data-bs-id="{{ lunch.pk }}">
+                                            data-bs-target="#globalModal" data-bs-name="{{ lunch.name }}"
+                                            data-bs-function="meal" data-bs-id="{{ lunch.pk }}" data-bs-operation="delete">
                                             <i class="fa-solid fa-trash"></i>
                                         </button>
                                     </td>
@@ -61,18 +66,20 @@
                             </tbody>
                         </table>
                     </div>
+                </div>
+                <div class="row">
                     <div class="col">
                         <table class="table table-hover table-bordered">
-                            <thead class="table-dark">
-                                <tr>
+                            <thead>
+                                <tr class="table-secondary">
                                     <th scope="col">Cenas</th>
-                                    <th scope="col" class="fit-2-icons">Acciones</th>
+                                    <th scope="col" class="fit-3-icons">Acciones</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {% for dinner in dinners %}
                                 <tr>
-                                    <td>
+                                    <td onclick="this.firstElementChild.submit()" role="button">
                                         <form method="POST" action="{% url 'meal_check' pk=dinner.pk %}" class="column-fit d-inline">
                                             {% csrf_token %}
                                             <input type="checkbox" name="ischecked" onclick="this.form.submit()"
@@ -81,11 +88,16 @@
                                         {{ dinner.name }}
                                     </td>
                                     <td>
+                                        <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal"
+                                            data-bs-target="#globalModal" data-bs-name="{{ dinner.name }}"
+                                            data-bs-function="meal" data-bs-id="{{ dinner.pk }}" data-bs-operation="ingredients">
+                                            <i class="fa-solid fa-drumstick-bite"></i>
+                                        </button>
                                         <a href="{% url 'meal_edit' pk=dinner.pk %}" class="btn btn-warning btn-sm">
                                             <i class="fa-solid fa-pen-to-square"></i>
                                         </a>
                                         <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal"
-                                            data-bs-target="#deleteModal" data-bs-name="{{ dinner.name }}"
+                                            data-bs-target="#globalModal" data-bs-name="{{ dinner.name }}" data-bs-operation="delete"
                                             data-bs-function="meal" data-bs-id="{{ dinner.pk }}">
                                             <i class="fa-solid fa-trash"></i>
                                         </button>
@@ -101,8 +113,8 @@
                 <div class="row">
                     <div class="col">
                         <table class="table table-hover table-bordered">
-                            <thead class="table-dark">
-                                <tr>
+                            <thead>
+                                <tr class="table-secondary">
                                     <th scope="col">Posibles comidas</th>
                                     <th scope="col" class="fit-4-icons">Acciones</th>
                                 </tr>
@@ -116,8 +128,8 @@
                                             <i class="fa-solid fa-pen-to-square"></i>
                                         </a>
                                         <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal"
-                                            data-bs-target="#deleteModal" data-bs-name="{{ possible_meal.name }}"
-                                            data-bs-function="meal" data-bs-id="{{ possible_meal.pk }}">
+                                            data-bs-target="#globalModal" data-bs-name="{{ possible_meal.name }}"
+                                            data-bs-function="meal" data-bs-id="{{ possible_meal.pk }}" data-bs-operation="delete">
                                             <i class="fa-solid fa-trash"></i>
                                         </button>
                                         <form method="POST" action="{% url 'meal_choose' pk=possible_meal.pk %}" class="column-fit d-inline">
@@ -141,6 +153,31 @@
                 </div>
             </div>
         </div>
+    </div>
+</div>
+<div id="hidden_ingredient_list" class="d-none">
+    <div>
+        <table class="table table-hover table-bordered">
+            <thead >
+                <tr class="table-secondary">
+                    <th scope="col">Ingredientes</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for ingredient in ingredients %}
+                <tr>
+                    <td>
+                        <div class="form-check" onclick="checkIngredient(this)" role="button">
+                            <input type="checkbox"
+                                class="form-check-input ingredient-list" id="check-{{ ingredient.pk }}" name="check-{{ ingredient.pk }}">
+                            <label class="form-check-label">{{ ingredient.name }}</label>
+                            <span class="opacity-50">{% if ingredient.comment %} {{ingredient.comment}} {% endif%}</span>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
 </div>
 {% endblock %}

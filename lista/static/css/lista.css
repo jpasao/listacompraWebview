@@ -4,6 +4,12 @@
 .fit-2-icons {
   width: 90px;
 }
+.fit-3-icons {
+  width: 125px;
+}
 .fit-4-icons {
   width: 155px;
+}
+.fit-height {
+  max-height: 65vh;
 }

@@ -25,8 +25,8 @@
 <div class="card my-3">
     <div class="card-body">
         <table class="table table-hover table-bordered">
-            <thead class="table-dark">
-                <tr>
+            <thead>
+                <tr class="table-secondary">
                     <th scope="col" class="column-fit text-center">Marcado</th>
                     <th scope="col" class="text-center fit-2-icons">Cantidad</th>
                     <th scope="col">Nombre</th>
@@ -62,8 +62,8 @@
                             <i class="fa-solid fa-pen-to-square"></i>
                         </a>
                         <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal"
-                            data-bs-target="#deleteModal" data-bs-name="{{ ingredient.name }}"
-                            data-bs-function="ingredient" data-bs-id="{{ ingredient.pk }}">
+                            data-bs-target="#globalModal" data-bs-name="{{ ingredient.name }}"
+                            data-bs-function="ingredient" data-bs-id="{{ ingredient.pk }}" data-bs-operation="delete">
                             <i class="fa-solid fa-trash"></i>
                         </button>
                     </td>
