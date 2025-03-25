@@ -11,4 +11,7 @@ urlpatterns = [
     path('accounts/logout/', views.LogoutView.as_view(next_page='/'), name='logout'),
     path('', include('lista.urls')),
 ]
-urlpatterns += [re_path(r'^static/(?:.*)$', serve, {'document_root': settings.STATIC_ROOT, })]
+urlpatterns += [
+    re_path(r'^media/(?P<path>.*)$', serve,{'document_root': settings.MEDIA_ROOT}),
+    re_path(r'^static/(?:.*)$', serve, {'document_root': settings.STATIC_ROOT, })
+]

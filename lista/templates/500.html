@@ -1,0 +1,26 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>ListaDLC</title>
+    {% load django_bootstrap5 %}
+    {% bootstrap_css %}
+    <link rel="stylesheet" href="{% static 'css/error.css' %}">
+</head>
+<body>
+    <div class="custom-bg text-dark">
+        <div class="d-flex align-items-center justify-content-center min-vh-100 px-2">
+            <div class="text-center">
+                <h1 class="display-1 fw-bold">500</h1>
+                <p class="fs-2 fw-medium mt-4">Esto es embarazoso...</p>
+                <p class="mt-4 mb-5">al servidor le ha dado un ataquito, y de momento solo podemos mostrar esta página</p>
+                <a href="/" class="btn btn-light fw-semibold rounded-pill px-4 py-2 custom-btn">
+                    Llévame al inicio
+                </a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
