@@ -35,7 +35,7 @@
                             Comidas
                         </a>
                     </li>
-                    <li><a href="#" class="nav-link px-2 {% if 'other' in url_name %} link-secondary {% endif %}">Otros</a></li>
+                    <li><a href="{% url 'other_list' %}" class="nav-link px-2 {% if 'other' in url_name %} link-secondary {% endif %}">Otros</a></li>
                 {% endwith %}
             </ul>
             <div class="dropdown">

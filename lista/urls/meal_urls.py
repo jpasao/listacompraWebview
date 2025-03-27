@@ -1,4 +1,5 @@
 from django.urls import path
+
 from ..views import meal_views
 
 meal_urlpatterns = [

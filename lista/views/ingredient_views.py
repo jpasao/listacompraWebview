@@ -93,7 +93,7 @@ def ingredient_modify_quantity(request, pk, increase):
     return redirect('ingredient_list')
 
 @login_required
-def ingredient_delete(request, pk):
+def ingredient_delete(_, pk):
     item = get_object_or_404(Ingredient, pk=pk)
     item.delete()
 

@@ -1,0 +1,131 @@
+{% extends 'base.html' %}
+{% load lista_extras %}
+
+{% block content %}
+<div class="card">
+    <div class="card-body">
+        <div class="row g-3">
+            <div class="col-6">
+                <form method="GET" name="searchForm">
+                    {% csrf_token %}
+                    <label for="{{ form.search.id_for_label }}" class="form-label">{{ form.search.label_tag }}</label>
+                    <input type="text" class="form-control" id="{{ form.search.id_for_label }}" name="{{ form.search.html_name }}"
+                    placeholder="Enter para buscar">
+                    {{ form.search.errors }}
+                </form>
+            </div>
+            <div class="col-2 d-flex justify-content-end">
+                <input type="reset" class="btn btn-secondary align-self-end" onclick="document.searchForm.submit()"> 
+            </div>
+            <div class="col-2 d-flex justify-content-end">
+                <a class="btn btn-primary align-self-end" href="{% url 'other_new' %}">Añadir nuevo</a>
+            </div>
+            <div class="col-2 d-flex justify-content-end">
+                <a class="btn btn-info align-self-end" href="{% url 'other_parent_list' %}">Gestionar tiendas</a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="card my-3 fit-height overflow-auto">
+    <div class="card-body">
+        <div class="row" id="otherList">
+            <div class="col-6">
+                <div class="accordion">
+                    {% for parent in parents %}
+                    <div class="accordion-item">
+                      <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#parent-{{ parent.id }}" aria-expanded="false" aria-controls="parent-{{ parent.id }}">
+                          {{ parent.name }}
+                        </button>
+                      </h2>
+                      <div id="parent-{{ parent.id }}" class="accordion-collapse collapse" data-bs-parent="#otherList">
+                        <div class="accordion-body">
+                            <table class="table table-hover table-bordered">
+                                <thead>
+                                    <tr class="table-secondary">
+                                        <th scope="col">Nombre</th>
+                                        <th scope="col" class="fit-2-icons">Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for child in unchecked_children|for_parent:parent.id %}
+                                    <tr>
+                                        <td onclick="this.firstElementChild.submit()" role="button">
+                                            <form method="POST" action="{% url 'other_check' pk=child.pk %}" class="column-fit d-inline">
+                                                {% csrf_token %}
+                                                <input class="form-check-input me-1" type="checkbox" value="" id="child-{{ child.id }}">
+                                            </form>
+                                            {{ child.name }}
+                                        </td>
+                                        <td>
+                                            <a href="{% url 'other_edit' pk=child.pk %}" class="btn btn-warning btn-sm">
+                                                <i class="fa-solid fa-pen-to-square"></i>
+                                            </a>
+                                            <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal"
+                                                data-bs-target="#globalModal" data-bs-name="{{ child.name }}"
+                                                data-bs-function="other" data-bs-id="{{ child.pk }}" data-bs-operation="delete">
+                                                <i class="fa-solid fa-trash"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                      </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="accordion">
+                    {% for parent in parents %}
+                    <div class="accordion-item">
+                      <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#parent-{{ parent.id }}" aria-expanded="false" aria-controls="parent-{{ parent.id }}">
+                          {{ parent.name }} &nbsp;<em>comprados</em>
+                        </button>
+                      </h2>
+                      <div id="parent-{{ parent.id }}" class="accordion-collapse collapse" data-bs-parent="#otherList">
+                        <div class="accordion-body">
+                            <table class="table table-hover table-bordered">
+                                <thead>
+                                    <tr class="table-secondary">
+                                        <th scope="col">Nombre</th>
+                                        <th scope="col" class="fit-2-icons">Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for child in checked_children|for_parent:parent.id %}
+                                    <tr>
+                                        <td onclick="this.firstElementChild.submit()" role="button">
+                                            <form method="POST" action="{% url 'other_uncheck' pk=child.pk %}" class="column-fit d-inline">
+                                                {% csrf_token %}
+                                                <input class="form-check-input me-1" type="checkbox" value="" id="child-{{ child.id }}">
+                                            </form>
+                                            {{ child.name }}
+                                        </td>
+                                        <td>
+                                            <a href="{% url 'other_edit' pk=child.pk %}" class="btn btn-warning btn-sm">
+                                                <i class="fa-solid fa-pen-to-square"></i>
+                                            </a>
+                                            <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal"
+                                                data-bs-target="#globalModal" data-bs-name="{{ child.name }}"
+                                                data-bs-function="other" data-bs-id="{{ child.pk }}" data-bs-operation="delete">
+                                                <i class="fa-solid fa-trash"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                      </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

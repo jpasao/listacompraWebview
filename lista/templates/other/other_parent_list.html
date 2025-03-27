@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% load lista_extras %}
+
+{% block content %}
+<div class="card">
+    <div class="card-body">
+        <div class="row g-3">
+            <div class="col-8">
+                <form method="GET" name="searchForm">
+                    {% csrf_token %}
+                    <label for="{{ form.search.id_for_label }}" class="form-label">{{ form.search.label_tag }}</label>
+                    <input type="text" class="form-control" id="{{ form.search.id_for_label }}" name="{{ form.search.html_name }}"
+                    placeholder="Enter para buscar">
+                    {{ form.search.errors }}
+                </form>
+            </div>
+            <div class="col-2 d-flex justify-content-end">
+                <input type="reset" class="btn btn-secondary align-self-end" onclick="document.searchForm.submit()"> 
+            </div>
+            <div class="col-2 d-flex justify-content-end">
+                <a class="btn btn-primary align-self-end" href="{% url 'other_parent_new' %}">Añadir nueva tienda</a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="card my-3 fit-height overflow-auto">
+    <div class="card-body">
+        <table class="table table-hover table-bordered">
+            <thead>
+                <tr class="table-secondary">
+                    <th scope="col">Nombre</th>
+                    <th scope="col" class="fit-2-icons">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for parent in parents %}
+                <tr>
+                    <td>{{ parent.name }}</td>
+                    <td>
+                        <a href="{% url 'other_parent_edit' pk=parent.pk %}" class="btn btn-warning btn-sm">
+                            <i class="fa-solid fa-pen-to-square"></i>
+                        </a>
+                        <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal"
+                            data-bs-target="#globalModal" data-bs-name="{{ parent.name }}" title="Al borrar '{{ parent.name }}' también se borrarán sus productos"
+                            data-bs-function="other/parent" data-bs-id="{{ parent.pk }}" data-bs-operation="delete">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

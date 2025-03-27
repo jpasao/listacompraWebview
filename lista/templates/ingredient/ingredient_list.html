@@ -40,7 +40,7 @@
                     <td class="text-center">
                         <form method="POST" action="{% url 'ingredient_check' pk=ingredient.pk %}">
                             {% csrf_token %}
-                            <input type="checkbox" name="ischecked" onclick="this.form.submit()"
+                            <input type="checkbox" name="ischecked" onclick="this.form.submit()" role="button"
                                 class="form-check-input" id="id_ischecked" {% if ingredient.ischecked == '1' %} checked {% endif %}>
                         </form>
                     </td>
